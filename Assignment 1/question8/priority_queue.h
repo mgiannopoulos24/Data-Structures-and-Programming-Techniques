@@ -1,16 +1,16 @@
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
 
-// Define the data type for the priority queue
+// Δομή για την προτεραιότητα ουράς
 typedef struct PriorityQueue PriorityQueue;
 
-// Function prototypes
-PriorityQueue* createPriorityQueue();
-void enqueue(PriorityQueue* pq, int item, int priority);
-int dequeue(PriorityQueue* pq);
-int peek(PriorityQueue* pq);
-int isEmpty(PriorityQueue* pq);
-void clear(PriorityQueue* pq);
-void destroyPriorityQueue(PriorityQueue* pq);
+// Συναρτήσεις
+PriorityQueue* createPriorityQueue();   // Δημιουργία προτεραιότητας ουράς
+void enqueue(PriorityQueue* pq, int item, int priority);  // Εισαγωγή στην ουρά
+int dequeue(PriorityQueue* pq);  // Αφαίρεση από την ουρά
+int peek(PriorityQueue* pq);     // Επιστροφή του πρώτου στοιχείου χωρίς αφαίρεση
+int isEmpty(PriorityQueue* pq);  // Έλεγχος αν η ουρά είναι άδεια
+void clear(PriorityQueue* pq);   // Εκκαθάριση όλων των στοιχείων
+void destroyPriorityQueue(PriorityQueue* pq);   // Καταστροφή της ουράς
 
 #endif /* PRIORITY_QUEUE_H */

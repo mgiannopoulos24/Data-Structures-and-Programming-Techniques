@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the data structure for the priority queue
+// Ορισμός της δομής για τον κόμβο της προτεραιότητας
 typedef struct PriorityQueueNode {
-    int state;  // Current state
-    int cost;   // Cost to reach this state
-    int heuristic;  // Heuristic evaluation
-    struct PriorityQueueNode* next;
+    int state;       // Τρέχουσα κατάσταση
+    int cost;        // Κόστος για την επίτευξη αυτής της κατάστασης
+    int heuristic;   // Ευρετική αξιολόγηση
+    struct PriorityQueueNode* next;  // Δείκτης προς τον επόμενο κόμβο
 } PriorityQueueNode;
 
 typedef struct {
-    PriorityQueueNode* front;
+    PriorityQueueNode* front;  // Δομή για την προτεραιότητα
 } PriorityQueue;
 
-// Function prototypes
+// Πρωτότυπα συναρτήσεων
 PriorityQueue* createPriorityQueue();
 void enqueue(PriorityQueue* pq, int state, int cost, int heuristic);
 int dequeue(PriorityQueue* pq);
@@ -22,41 +22,43 @@ void clear(PriorityQueue* pq);
 void destroyPriorityQueue(PriorityQueue* pq);
 int solveCubeProblem(int initial_state, int target_state);
 
-// Function implementations...
+// Υλοποίηση των συναρτήσεων...
 
 int main() {
-    int N; // Number of cubes
-    printf("Enter the number of cubes: ");
+    int N; // Αριθμός των κύβων
+    printf("Εισάγετε τον αριθμό των κύβων: ");
     scanf("%d", &N);
 
-    int initial_state = 0; // Initial state where all cubes are on the table
-    int target_state = (1 << N) - 1; // Target state where all cubes are stacked
+    int initial_state = 0; // Αρχική κατάσταση όπου όλοι οι κύβοι είναι στο τραπέζι
+    int target_state = (1 << N) - 1; // Επιθυμητή κατάσταση όπου όλοι οι κύβοι είναι στοίβα
 
     int moves = solveCubeProblem(initial_state, target_state);
 
     if (moves == -1) {
-        printf("No solution found.\n");
+        printf("Δεν βρέθηκε λύση.\n");
     } else {
-        printf("Minimum moves required to solve the problem: %d\n", moves);
+        printf("Ελάχιστες κινήσεις που απαιτούνται για την επίλυση του προβλήματος: %d\n", moves);
     }
 
     return 0;
 }
 
+// Δημιουργία νέας προτεραιότητας
 PriorityQueue* createPriorityQueue() {
     PriorityQueue* pq = (PriorityQueue*)malloc(sizeof(PriorityQueue));
     if (pq == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("Αποτυχία εκχώρησης μνήμης.\n");
         exit(EXIT_FAILURE);
     }
     pq->front = NULL;
     return pq;
 }
 
+// Εισαγωγή στοιχείου στην προτεραιότητα
 void enqueue(PriorityQueue* pq, int state, int cost, int heuristic) {
     PriorityQueueNode* newNode = (PriorityQueueNode*)malloc(sizeof(PriorityQueueNode));
     if (newNode == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("Αποτυχία εκχώρησης μνήμης.\n");
         exit(EXIT_FAILURE);
     }
     newNode->state = state;
@@ -77,9 +79,10 @@ void enqueue(PriorityQueue* pq, int state, int cost, int heuristic) {
     }
 }
 
+// Αφαίρεση και επιστροφή του στοιχείου με τη μεγαλύτερη προτεραιότητα από την προτεραιότητα
 int dequeue(PriorityQueue* pq) {
     if (isEmpty(pq)) {
-        printf("Priority queue is empty.\n");
+        printf("Η προτεραιότητα είναι κενή.\n");
         exit(EXIT_FAILURE);
     }
     int state = pq->front->state;
@@ -89,24 +92,28 @@ int dequeue(PriorityQueue* pq) {
     return state;
 }
 
+// Έλεγχος εάν η προτεραιότητα είναι κενή
 int isEmpty(PriorityQueue* pq) {
     return pq->front == NULL;
 }
 
+// Εκκαθάριση όλων των στοιχείων από την προτεραιότητα
 void clear(PriorityQueue* pq) {
     while (!isEmpty(pq)) {
         dequeue(pq);
     }
 }
 
+// Καταστροφή της προτεραιότητας και απελευθέρωση της εκχωρημένης μνήμης
 void destroyPriorityQueue(PriorityQueue* pq) {
     clear(pq);
     free(pq);
 }
 
+// Λύση του προβλήματος με τους κύβους
 int solveCubeProblem(int initial_state, int target_state) {
     PriorityQueue* pq = createPriorityQueue();
-    enqueue(pq, initial_state, 0, target_state - initial_state); // Initial state with heuristic evaluation
+    enqueue(pq, initial_state, 0, target_state - initial_state); // Αρχική κατάσταση με ευρετική αξιολόγηση
     int moves = 0;
 
     while (!isEmpty(pq)) {
@@ -116,13 +123,13 @@ int solveCubeProblem(int initial_state, int target_state) {
             return moves;
         }
 
-        // Expand current state and enqueue next states
-        for (int i = 0; i < sizeof(int) * 8 - 1; i++) { // Assuming 32-bit integer for state representation
-            if ((current_state >> i) & 1) { // If cube i is on another cube
-                int next_state = current_state - (1 << i); // Move cube i to the table
+        // Ανάπτυξη της τρέχουσας κατάστασης και εισαγωγή των επόμενων καταστάσεων στην προτεραιότητα
+        for (int i = 0; i < sizeof(int) * 8 - 1; i++) { // Υποθέτουμε 32-bit integer για την αναπαράσταση της κατάστασης
+            if ((current_state >> i) & 1) { // Αν ο κύβος i είναι πάνω σε άλλον κύβο
+                int next_state = current_state - (1 << i); // Μετακίνηση του κύβου i στο τραπέζι
                 enqueue(pq, next_state, moves + 1, target_state - next_state);
-            } else { // If cube i is on the table
-                int next_state = current_state + (1 << i); // Move cube i to another cube
+            } else { // Αν ο κύβος i είναι στο τραπέζι
+                int next_state = current_state + (1 << i); // Μετακίνηση του κύβου i σε άλλον κύβο
                 enqueue(pq, next_state, moves + 1, target_state - next_state);
             }
         }
@@ -130,5 +137,5 @@ int solveCubeProblem(int initial_state, int target_state) {
     }
 
     destroyPriorityQueue(pq);
-    return -1; // No solution found
+    return -1; // Δεν βρέθηκε λύση
 }

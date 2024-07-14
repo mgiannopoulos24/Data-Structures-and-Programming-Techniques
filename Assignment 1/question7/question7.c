@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure for the linked list
+// Δομή για τον κόμβο της λίστας
 typedef struct Node {
     int data;
     struct Node* next;
 } Node;
 
-// Function to create a new node
+// Συνάρτηση για τη δημιουργία νέου κόμβου
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("Αποτυχία εκχώρησης μνήμης.\n");
         exit(EXIT_FAILURE);
     }
     newNode->data = data;
@@ -19,14 +19,14 @@ Node* createNode(int data) {
     return newNode;
 }
 
-// Function to insert a node at the beginning of the list
+// Συνάρτηση για εισαγωγή κόμβου στην αρχή της λίστας
 void insertAtBeginning(Node** head, int data) {
     Node* newNode = createNode(data);
     newNode->next = *head;
     *head = newNode;
 }
 
-// Function to print the list
+// Συνάρτηση για εκτύπωση της λίστας
 void printList(Node* head) {
     Node* current = head;
     while (current != NULL) {
@@ -36,26 +36,26 @@ void printList(Node* head) {
     printf("NULL\n");
 }
 
-// Function to perform insertion sort on the list
+// Συνάρτηση για ταξινόμηση με εισαγωγή (insertion sort) στη λίστα
 void insertionSort(Node** head) {
     if (*head == NULL || (*head)->next == NULL) {
-        return; // List is already sorted or contains only one element
+        return; // Η λίστα είναι ήδη ταξινομημένη ή περιέχει μόνο ένα στοιχείο
     }
 
-    Node* sorted = NULL; // Initialize the sorted list
+    Node* sorted = NULL; // Αρχικοποίηση της ταξινομημένης λίστας
     Node* current = *head;
 
     while (current != NULL) {
-        Node* next = current->next; // Keep track of the next node
-        Node* prev = NULL; // Initialize the previous pointer
+        Node* next = current->next; // Κρατάμε τον επόμενο κόμβο
+        Node* prev = NULL; // Αρχικοποίηση δείκτη προηγούμενου
 
-        // Find the position to insert the current node in the sorted list
+        // Βρίσκουμε τη θέση για εισαγωγή του τρέχοντος κόμβου στην ταξινομημένη λίστα
         while (sorted != NULL && sorted->data < current->data) {
             prev = sorted;
             sorted = sorted->next;
         }
 
-        // Insert the current node into the sorted list
+        // Εισαγωγή του τρέχοντος κόμβου στην ταξινομημένη λίστα
         if (prev == NULL) {
             current->next = sorted;
             sorted = current;
@@ -64,13 +64,13 @@ void insertionSort(Node** head) {
             current->next = sorted;
         }
 
-        current = next; // Move to the next node for sorting
+        current = next; // Μετακινούμαστε στον επόμενο κόμβο για ταξινόμηση
     }
 
-    *head = sorted; // Set the head of the list to the sorted list
+    *head = sorted; // Ορίζουμε την αρχή της λίστας στην ταξινομημένη λίστα
 }
 
-// Function to free the memory of the list
+// Συνάρτηση για απελευθέρωση της μνήμης της λίστας
 void freeList(Node* head) {
     Node* current = head;
     while (current != NULL) {
@@ -80,11 +80,11 @@ void freeList(Node* head) {
     }
 }
 
-// Function to merge and sort two lists and return a new sorted list
+// Συνάρτηση για συγχώνευση και ταξινόμηση δύο λιστών και επιστροφή της νέας ταξινομημένης λίστας
 Node* mergeAndSortLists(Node* head1, Node* head2) {
     Node* mergedList = NULL;
 
-    // Merge the two lists into a new list
+    // Συγχώνευση των δύο λιστών σε μια νέα λίστα
     while (head1 != NULL && head2 != NULL) {
         if (head1->data <= head2->data) {
             insertAtBeginning(&mergedList, head1->data);
@@ -95,7 +95,7 @@ Node* mergeAndSortLists(Node* head1, Node* head2) {
         }
     }
 
-    // If one list has more elements than the other
+    // Αν κάποια λίστα έχει περισσότερα στοιχεία από την άλλη
     while (head1 != NULL) {
         insertAtBeginning(&mergedList, head1->data);
         head1 = head1->next;
@@ -110,34 +110,34 @@ Node* mergeAndSortLists(Node* head1, Node* head2) {
 }
 
 int main() {
-    // Create and sort the first list
+    // Δημιουργία και ταξινόμηση της πρώτης λίστας
     Node* list1 = NULL;
     insertAtBeginning(&list1, 5);
     insertAtBeginning(&list1, 3);
     insertAtBeginning(&list1, 8);
-    printf("Original list 1:\n");
+    printf("Αρχική λίστα 1:\n");
     printList(list1);
     insertionSort(&list1);
-    printf("Sorted list 1:\n");
+    printf("Ταξινομημένη λίστα 1:\n");
     printList(list1);
 
-    // Create and sort the second list
+    // Δημιουργία και ταξινόμηση της δεύτερης λίστας
     Node* list2 = NULL;
     insertAtBeginning(&list2, 2);
     insertAtBeginning(&list2, 7);
     insertAtBeginning(&list2, 4);
-    printf("\nOriginal list 2:\n");
+    printf("\nΑρχική λίστα 2:\n");
     printList(list2);
     insertionSort(&list2);
-    printf("Sorted list 2:\n");
+    printf("Ταξινομημένη λίστα 2:\n");
     printList(list2);
 
-    // Merge and sort the two sorted lists
+    // Συγχώνευση και ταξινόμηση των δύο ταξινομημένων λιστών
     Node* mergedList = mergeAndSortLists(list1, list2);
-    printf("\nMerged and sorted list:\n");
+    printf("\nΣυγχωνευμένη και ταξινομημένη λίστα:\n");
     printList(mergedList);
 
-    // Free the memory of the lists
+    // Απελευθέρωση της μνήμης των λιστών
     freeList(list1);
     freeList(list2);
     freeList(mergedList);

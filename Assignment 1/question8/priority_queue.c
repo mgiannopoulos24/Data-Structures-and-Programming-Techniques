@@ -1,22 +1,20 @@
-// priority_queue.c
-
 #include "priority_queue.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-// Node structure for the priority queue
+// Δομή για τον κόμβο της προτεραιότητας ουράς
 typedef struct Node {
     int data;
     int priority;
     struct Node* next;
 } Node;
 
-// Priority queue structure
+// Δομή για την προτεραιότητα ουράς
 struct PriorityQueue {
     Node* front;
 };
 
-// Function to create a new node
+// Συνάρτηση για δημιουργία νέου κόμβου
 Node* createNode(int item, int priority) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
@@ -28,7 +26,7 @@ Node* createNode(int item, int priority) {
     return newNode;
 }
 
-// Function to create a new priority queue
+// Συνάρτηση για δημιουργία νέας προτεραιότητας ουράς
 PriorityQueue* createPriorityQueue() {
     PriorityQueue* pq = (PriorityQueue*)malloc(sizeof(PriorityQueue));
     if (pq == NULL) {
@@ -38,7 +36,7 @@ PriorityQueue* createPriorityQueue() {
     return pq;
 }
 
-// Function to insert an element into the priority queue
+// Συνάρτηση για εισαγωγή στοιχείου στην προτεραιότητα ουρά
 void enqueue(PriorityQueue* pq, int item, int priority) {
     Node* newNode = createNode(item, priority);
     if (pq->front == NULL || priority > pq->front->priority) {
@@ -54,7 +52,7 @@ void enqueue(PriorityQueue* pq, int item, int priority) {
     }
 }
 
-// Function to remove and return the element with the highest priority from the priority queue
+// Συνάρτηση για αφαίρεση και επιστροφή του στοιχείου με τη μεγαλύτερη προτεραιότητα από την προτεραιότητα ουρά
 int dequeue(PriorityQueue* pq) {
     if (isEmpty(pq)) {
         exit(EXIT_FAILURE);
@@ -66,7 +64,7 @@ int dequeue(PriorityQueue* pq) {
     return item;
 }
 
-// Function to return the element with the highest priority from the priority queue without removing it
+// Συνάρτηση για επιστροφή του στοιχείου με τη μεγαλύτερη προτεραιότητα από την προτεραιότητα ουρά χωρίς αφαίρεση
 int peek(PriorityQueue* pq) {
     if (isEmpty(pq)) {
         exit(EXIT_FAILURE);
@@ -74,42 +72,41 @@ int peek(PriorityQueue* pq) {
     return pq->front->data;
 }
 
-// Function to check if the priority queue is empty
+// Συνάρτηση για έλεγχο αν η προτεραιότητα ουρά είναι άδεια
 int isEmpty(PriorityQueue* pq) {
     return pq->front == NULL;
 }
 
-// Function to clear all elements from the priority queue
+// Συνάρτηση για εκκαθάριση όλων των στοιχείων από την προτεραιότητα ουρά
 void clear(PriorityQueue* pq) {
     while (!isEmpty(pq)) {
         dequeue(pq);
     }
 }
 
-// Function to destroy the priority queue and free allocated memory
+// Συνάρτηση για καταστροφή της προτεραιότητας ουράς και απελευθέρωση της δεσμευμένης μνήμης
 void destroyPriorityQueue(PriorityQueue* pq) {
     clear(pq);
     free(pq);
 }
 
-
 int main() {
-    // Create a priority queue
+    // Δημιουργία προτεραιότητας ουράς
     PriorityQueue* pq = createPriorityQueue();
 
-    // Insert elements into the priority queue with priority (priority = value of the element)
+    // Εισαγωγή στοιχείων στην προτεραιότητα ουρά με προτεραιότητα (προτεραιότητα = τιμή του στοιχείου)
     enqueue(pq, 5, 5);
     enqueue(pq, 3, 3);
     enqueue(pq, 8, 8);
 
-    // Dequeue elements from the priority queue
-    printf("Priority Queue elements: ");
+    // Αφαίρεση στοιχείων από την προτεραιότητα ουρά
+    printf("Στοιχεία προτεραιότητας ουράς: ");
     while (!isEmpty(pq)) {
         printf("%d ", dequeue(pq));
     }
     printf("\n");
 
-    // Destroy the priority queue
+    // Καταστροφή της προτεραιότητας ουράς
     destroyPriorityQueue(pq);
 
     return 0;
